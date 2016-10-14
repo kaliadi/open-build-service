@@ -44,9 +44,12 @@ class Webui::PackageController < Webui::WebuiController
   prepend_before_action :lockout_spiders, :only => [:revisions, :dependency, :rdiff, :binary, :binaries, :requests]
 
   def show
+    @expand = [nil, '1'].include?(params[:expand])
+    
     if spider?
       params.delete(:rev)
       params.delete(:srcmd5)
+      @expand = false
     end
 
     @srcmd5 = params[:srcmd5]
@@ -57,14 +60,6 @@ class Webui::PackageController < Webui::WebuiController
     @failures = 0
     load_buildresults
     set_linking_packages
-
-    if spider?
-      @expand = 0
-    elsif params[:expand]
-      @expand = params[:expand].to_i
-    else
-      @expand = 1
-    end
 
     @is_current_rev = false
     if set_file_details
@@ -406,14 +401,14 @@ class Webui::PackageController < Webui::WebuiController
     rescue ActiveXML::Transport::Error => e
       # TODO crudest hack ever!
       if e.summary == 'service in progress'
-        @expand = 0
+        @expand = false
         # silently in this case
         return set_file_details
       end
-      if @expand == 1
+      if @expand
         @forced_unexpand = e.summary
         @forced_unexpand = e.details if e.details
-        @expand = 0
+        @expand = false
         return set_file_details
       end
       @files = []
