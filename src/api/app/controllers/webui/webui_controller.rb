@@ -186,24 +186,14 @@ class Webui::WebuiController < ActionController::Base
     @current_controller = controller_name
   end
 
-  # Needed to hide/render some views to well known spider bots
-  # FIXME: We should get rid of it
-  def check_spiders
-    @spider_bot = request.env.has_key?('HTTP_OBS_SPIDER')
-  end
-  private :check_spiders
-
   def lockout_spiders
-    check_spiders
-    if @spider_bot
-      head :ok
-      return true
-    end
-    return false
+    @spider_bot = request.env.has_key?('HTTP_OBS_SPIDER')
+    head :ok if @spider_bot
+    @spider_bot
   end
 
   def check_user
-    check_spiders
+    @spider_bot = request.env.has_key?('HTTP_OBS_SPIDER')
     User.current = nil # reset old users hanging around
 
     if CONFIG['proxy_auth_mode'] == :on
