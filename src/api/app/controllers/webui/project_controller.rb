@@ -53,7 +53,7 @@ class Webui::ProjectController < Webui::WebuiController
     atype = AttribType.find_by_namespace_and_name!('OBS', 'VeryImportantProject')
     @important_projects = Project.find_by_attribute_type(atype).where('name <> ?', 'deleted').pluck(:name, :title)
 
-    if @spider_bot
+    if spider?
       render :list_simple, status: params[:nextstatus]
     else
       render :list, status: params[:nextstatus]

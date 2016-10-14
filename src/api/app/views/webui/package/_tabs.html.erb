@@ -11,7 +11,7 @@
       <%= tab 'details', 'Details', :controller => 'patchinfo', :action => 'show' %>
     <% end %>
     <%= tab 'overview', 'Overview', :controller => 'package', :action => 'show' %>
-    <% unless @spider_bot -%>
+    <% unless spider? -%>
       <%= tab 'repositories', 'Repositories', :controller => 'repositories', :action => 'index' %>
       <%= tab 'revisions', 'Revisions', :controller => 'package', :action => 'revisions' %>
       <%= tab 'requests', "Requests", :controller => 'package', :action => 'requests' %>
@@ -25,7 +25,7 @@
       <li id="advanced_list_item"><a href="#" id="advanced_tabs_trigger">Advanced</a></li>
     <% end %>
   </ul>
-  <% unless @spider_bot -%>
+  <% unless spider? -%>
     <div id="advanced_tabs" class="hidden">
       <ul>
         <%= tab 'attributes', 'Attributes', controller: :attribute, :package => @package, :project => @project, :action => 'index' %>

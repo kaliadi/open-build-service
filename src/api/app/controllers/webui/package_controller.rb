@@ -44,12 +44,12 @@ class Webui::PackageController < Webui::WebuiController
   prepend_before_action :lockout_spiders, :only => [:revisions, :dependency, :rdiff, :binary, :binaries, :requests]
 
   def show
-    if lockout_spiders
+    if spider?
       params.delete(:rev)
       params.delete(:srcmd5)
     end
 
-    @srcmd5   = params[:srcmd5]
+    @srcmd5 = params[:srcmd5]
     @revision_parameter = params[:rev]
 
     @bugowners_mail = (@package.bugowner_emails + @project.api_obj.bugowner_emails).uniq
@@ -58,7 +58,7 @@ class Webui::PackageController < Webui::WebuiController
     load_buildresults
     set_linking_packages
 
-    if @spider_bot
+    if spider?
       @expand = 0
     elsif params[:expand]
       @expand = params[:expand].to_i
@@ -787,7 +787,7 @@ class Webui::PackageController < Webui::WebuiController
       redirect_back_or_to action: :show, project: @project, package: @package
       return
     end
-    if @spider_bot
+    if spider?
       render :template => 'webui/package/simple_file_view'
       return
     end

@@ -185,15 +185,17 @@ class Webui::WebuiController < ActionController::Base
     @current_action = action_name
     @current_controller = controller_name
   end
+  
+  def spider?
+    request.env.has_key?('HTTP_OBS_SPIDER')
+  end
+  helper_method :spider?
 
   def lockout_spiders
-    @spider_bot = request.env.has_key?('HTTP_OBS_SPIDER')
-    head :ok if @spider_bot
-    @spider_bot
+    head :ok if spider?
   end
 
   def check_user
-    @spider_bot = request.env.has_key?('HTTP_OBS_SPIDER')
     User.current = nil # reset old users hanging around
 
     if CONFIG['proxy_auth_mode'] == :on

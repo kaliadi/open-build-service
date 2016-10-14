@@ -41,7 +41,7 @@ module Webui::ProjectHelper
 
   def project_bread_crumb(*args)
     @crumb_list = [link_to('Projects', project_list_public_path)]
-    return if @spider_bot
+    return if spider?
     # FIXME: should also work for remote
     if @project && @project.kind_of?(Project) && !@project.new_record?
       prj_parents = nil
