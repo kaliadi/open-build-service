@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :find_obj, only: [:show_comments, :create]
+  before_action :find_obj
 
   def show_comments
     @comments = @obj.comments.order(:id)
@@ -12,7 +12,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    comment = Comment.find params[:id]
+    comment = @obj.comments.find params[:id]
     unless comment.check_delete_permissions
       raise NoPermission.new "No permission to delete #{params[:id]}"
     end

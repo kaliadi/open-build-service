@@ -2,12 +2,14 @@ require 'event'
 require 'set'
 
 class Comment < ApplicationRecord
+  #self.abstract_class = true
+
   belongs_to :bs_request, inverse_of: :comments
   belongs_to :project, inverse_of: :comments
   belongs_to :package, inverse_of: :comments
   belongs_to :user, inverse_of: :comments
 
-  validates :body, :user, :type, presence: true
+  validates :body, :user, presence: true
 
   after_create :create_notification
 
@@ -25,9 +27,8 @@ class Comment < ApplicationRecord
     params[:comment_body] = self.body
   end
 
-  # build an array of users, commenting on a specific object type
-  def involved_users(object_field, object_value)
-    record = Comment.where(object_field => object_value)
+  # build an array of users, commenting on a given set of comments
+  def involved_users(record)
     users = Set.new
     users_mentioned = Set.new
     record.each do |comment|

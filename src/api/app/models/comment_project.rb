@@ -9,7 +9,7 @@ class CommentProject < Comment
   def create_notification(params = {})
     super
     params[:project] = self.project.name
-    params[:commenters] = involved_users(:project_id, self.project.id)
+    params[:commenters] = involved_users(CommentProject.where(project: project))
 
     # call the action
     Event::CommentForProject.create params
