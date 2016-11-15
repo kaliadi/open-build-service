@@ -1,0 +1,23 @@
+[1mdiff --git a/src/api/app/controllers/request_controller.rb b/src/api/app/controllers/request_controller.rb[m
+[1mindex d4e8648..3d47f1b 100644[m
+[1m--- a/src/api/app/controllers/request_controller.rb[m
+[1m+++ b/src/api/app/controllers/request_controller.rb[m
+[36m@@ -29,12 +29,12 @@[m [mclass RequestController < ApplicationController[m
+     raise RequireFilter.new if [:project, :user, :states, :types, :reviewstates, :ids].all? { |f| params[f].blank? }[m
+ [m
+     # convert comma seperated values into arrays[m
+[31m-    roles = params[:roles].split(',') if params[:roles][m
+[31m-    types = params[:types].split(',') if params[:types][m
+[31m-    states = params[:states].split(',') if params[:states][m
+[31m-    review_states = params[:reviewstates].split(',') if params[:reviewstates][m
+[31m-    ids = params[:ids].split(',').map { |i| i.to_i } if params[:ids][m
+[31m-    params = params.merge({states: states, types: types, review_states: review_states, roles: roles, ids: ids})[m
+[32m+[m[32m    params[:roles] = params[:roles].split(',') if params[:roles][m
+[32m+[m[32m    params[:types] = params[:types].split(',') if params[:types][m
+[32m+[m[32m    params[:states] = params[:states].split(',') if params[:states][m
+[32m+[m[32m    params[:review_states] = params[:reviewstates].split(',') if params[:reviewstates][m
+[32m+[m[32m    params[:ids] = params[:ids].split(',').map { |i| i.to_i } if params[:ids][m
+[32m+[m
+     rel = BsRequest.collection(params).includes([:reviews]).[m
+           includes({bs_request_actions: :bs_request_action_accept_info}).[m
+           order('bs_requests.id').references(:bs_requests)[m
