@@ -1,6 +1,7 @@
 #!/bin/bash
 # This script prepares the CI build for running
 
+phantomjs -v
 echo "Configuring backend"
 sed -i -e "s|my \$hostname = .*$|my \$hostname = 'localhost';|" \
        -e "s|our \$bsuser = 'obsrun';|our \$bsuser = 'jenkins';|" \
