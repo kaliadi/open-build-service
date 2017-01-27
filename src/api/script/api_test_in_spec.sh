@@ -31,7 +31,7 @@ rm -rf $MYSQL_DATADIR $MYSQL_SOCKET
 mkdir -p $MYSQL_BASEDIR
 chown -R $MYSQLD_USER $MYSQL_BASEDIR
 mysql_install_db --user=$MYSQLD_USER --datadir=$MYSQL_DATADIR
-/usr/sbin/mysqld --user=$MYSQLD_USER --datadir=$MYSQL_DATADIR --skip-networking --socket=$MYSQL_SOCKET &
+/usr/sbin/mysqld --user=$MYSQLD_USER --datadir=$MYSQL_DATADIR --socket=$MYSQL_SOCKET &
 sleep 2
 
 ##################### api
