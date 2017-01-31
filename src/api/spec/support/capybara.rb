@@ -9,7 +9,8 @@ Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: {'HTTP_ACCEPT' => 'text/html'})
 end
 
-Capybara.javascript_driver = :poltergeist
+Capybara.default_driver = :accessible_poltergeist
+Capybara.javascript_driver = Capybara.default_driver
 
 # Automatically save the page a test fails
 RSpec.configure do |config|

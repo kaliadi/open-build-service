@@ -60,6 +60,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-accessible (0.2.1)
+      capybara (~> 2.0)
     capybara_minitest_spec (1.0.5)
       capybara (>= 2)
       minitest (>= 4)
@@ -354,6 +356,7 @@ DEPENDENCIES
   acts_as_list
   acts_as_tree
   bundler
+  capybara-accessible
   capybara_minitest_spec
   chunky_png
   clockwork (>= 0.7)

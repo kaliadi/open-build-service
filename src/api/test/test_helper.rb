@@ -44,6 +44,10 @@ require 'mocha/setup'
 require 'capybara/poltergeist'
 
 require 'capybara/rails'
+
+require 'capybara/rspec'
+require 'capybara/accessible'
+
 Capybara.default_max_wait_time = 6
 
 Capybara.register_driver :poltergeist do |app|
@@ -54,7 +58,8 @@ Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: {'HTTP_ACCEPT' => 'text/html'})
 end
 
-Capybara.javascript_driver = :poltergeist
+Capybara.default_driver = :accessible_poltergeist
+Capybara.javascript_driver = Capybara.default_driver
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
@@ -277,14 +282,15 @@ module Webui
 # crude work around - one day I will dig into why this is necessary
       Minitest::Spec.new('MINE') unless Minitest::Spec.current
       Suse::Backend.start_test_backend
-      # Capybara.current_driver = Capybara.javascript_driver
+      Capybara.default_driver = :accessible_poltergeist
+      Capybara.javascript_driver = Capybara.default_driver
       @starttime = Time.now
       WebMock.disable_net_connect!(allow_localhost: true)
       CONFIG['global_write_through'] = true
     end
 
     def use_js
-      Capybara.current_driver = Capybara.javascript_driver
+       #Capybara.current_driver = Capybara.javascript_driver
     end
 
     teardown do
