@@ -926,6 +926,14 @@ class Project < ApplicationRecord
   end
 
   def branch_to_repositories_from(project, pkg_to_enable, opts = {})
+    if project.is_a? Project
+      branch_local_repositories(project, pkg_to_enable, opts)
+    else
+      branch_remote_repositories(project, pkg_to_enable)
+    end
+  end
+
+  def branch_local_repositories(project, pkg_to_enable, opts = {})
     # shall we use the repositories from a different project?
     project = project.update_instance('OBS', 'BranchRepositoriesFromProject')
     skip_repos = []
@@ -966,6 +974,25 @@ class Project < ApplicationRecord
     pkg_to_enable.channels.each do |channel|
       channel.add_channel_repos_to_project(pkg_to_enable)
     end
+  end
+
+  def branch_remote_repositories(project, pkg_to_enable)
+    possible_ancestors = RemoteProject.new(name: project).possible_ancestor_names
+    possible_ancestors = [project] if possible_ancestors.empty?
+
+    interconnect_project = RemoteProject.find_by(name: possible_ancestors)
+
+    return unless interconnect_project
+
+    # retrieve and parse remote _meta file for project
+    remote_project_meta = Nokogiri::XML(ProjectMetaFile.new(project_name: project).to_s)
+
+    # append the repositories to the _meta file of the local project
+    local_project_meta = Nokogiri::XML(to_axml)
+    local_project_meta.at('project').add_child(remote_project_meta.xpath('//repository'))
+
+    # update branched project _meta file
+    update_from_xml!(Xmlhash.parse(local_project_meta.to_xml))
   end
 
   def sync_repository_pathes

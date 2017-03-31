@@ -3,6 +3,7 @@ require 'rantly/rspec_extensions'
 
 RSpec.describe Project do
   let!(:project) { create(:project) }
+  let(:package) { create(:package, project: project) }
   let(:leap_project) { create(:project, name: 'openSUSE_Leap') }
   let(:attribute_type) { AttribType.find_by_namespace_and_name!('OBS', 'ImageTemplates') }
 
@@ -95,6 +96,51 @@ RSpec.describe Project do
 
     it { expect(leap_project.image_template?).to be(true) }
     it { expect(tumbleweed_project.image_template?).to be(false) }
+  end
+
+  describe '#branch_remote_repositories' do
+    let(:remote_project) { create(:remote_project) }
+    let(:remote_meta_xml) {
+      <<-XML_DATA
+        <project name="home:mschnitzer">
+          <title>Cool Title</title>
+          <description>Cool Description</description>
+          <repository name="xUbuntu_14.04">
+            <path project="Ubuntu:14.04" repository="universe"/>
+            <arch>i586</arch>
+            <arch>x86_64</arch>
+          </repository>
+          <repository name="openSUSE_42.2">
+            <path project="openSUSE:Leap:42.2:Update" repository="standard"/>
+            <arch>x86_64</arch>
+          </repository>
+        </project>
+      XML_DATA
+    }
+    let(:local_xml_meta) {
+      <<-XML_DATA
+        <project name="#{project}">
+          <title>#{project.title}</title>
+          <description/>
+          <repository name="xUbuntu_14.04">
+            <path project="Ubuntu:14.04" repository="universe"/>" +
+            <arch>i586</arch>
+            <arch>x86_64</arch>
+          </repository>
+          <repository name="openSUSE_42.2">
+            <path project="openSUSE:Leap:42.2:Update" repository="standard"/>
+            <arch>x86_64</arch>
+          </repository>
+        </project>
+      XML_DATA
+    }
+    let(:expected_xml) { Nokogiri::XML(local_xml_meta) }
+
+    it 'updates a project meta description' do
+      allow(ProjectMetaFile).to receive(:new).and_return(remote_meta_xml)
+      expect(project).to receive(:update_from_xml!).with(Xmlhash.parse(expected_xml.to_xml))
+      project.branch_remote_repositories(remote_project.name, package)
+    end
   end
 
   describe '#self.valid_name?' do
