@@ -174,6 +174,14 @@ OBSApi::Application.routes.draw do
       delete 'flag/:project(/:package)/:flag' => :remove_flag, constraints: cons
     end
 
+    controller 'webui/kiwi_images' do
+      get 'kiwi_images/:project(/:package)' => :show, constraints: cons
+    end
+
+    controller 'webui/kiwi_images/repositories' do
+      post 'kiwi_images/:project/:package/repositories' => :create, constraints: cons
+    end
+
     controller 'webui/project' do
       get 'project/' => :index, as: 'projects'
       get 'project/list_public' => :index

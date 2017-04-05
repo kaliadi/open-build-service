@@ -1,0 +1,27 @@
+- @pagetitle = "Kiwi Image of #{@project.name}"
+- @metarobots = 'noindex'
+- project_bread_crumb('Kiwi Image')
+= render partial: 'webui/package/tabs'
+
+%div
+  %h3
+    Kiwi Image for #{@project}
+  %p
+    = @kiwi_image.name
+
+%div
+  %ul
+    - @kiwi_image.repository.each do |repository|
+      %li
+        Type: #{repository.type}
+        Source Path: #{repository.source.path}
+
+%h2
+  Add Repository to kiwi image
+  = form_tag(controller: 'webui/kiwi_images/repositories', action: :create, project: @project, package: @package) do
+    %p
+      %strong Repository Name:
+      %br/
+      = text_field_tag 'repository_name', ''
+    %p
+      = submit_tag 'Add Repo'

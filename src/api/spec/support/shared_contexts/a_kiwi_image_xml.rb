@@ -30,6 +30,12 @@ RSpec.shared_context 'a kiwi image xml' do
     <package name="openSUSE-release-dvd"/>
     <package name="gfxboot-devel" bootinclude="true"/>
   </packages>
+  <repository type="rpm-md">
+    <source path="http://download.opensuse.org/update/13.2/"/>
+  </repository>
+  <repository type="rpm-md">
+    <source path="http://download.opensuse.org/distribution/13.2/repo/oss/"/>
+  </repository>
 </image>
     XML
   end
