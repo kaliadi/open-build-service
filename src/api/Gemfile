@@ -62,6 +62,8 @@ gem 'feature'
 gem 'peek'
 gem 'peek-dalli'
 gem 'peek-mysql2'
+gem 'virtus'
+gem 'virtus_convert'
 
 group :development, :production do
   # to have the delayed job daemon

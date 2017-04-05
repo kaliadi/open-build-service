@@ -56,6 +56,10 @@ GEM
     arel (7.1.4)
     ast (2.3.0)
     atomic (1.1.99)
+    axiom-types (0.1.1)
+      descendants_tracker (~> 0.0.4)
+      ice_nine (~> 0.11.0)
+      thread_safe (~> 0.3, >= 0.3.1)
     builder (3.2.3)
     capybara (2.13.0)
       addressable
@@ -80,6 +84,8 @@ GEM
     codemirror-rails (5.16.0)
       railties (>= 3.0, < 6.0)
     coderay (1.1.1)
+    coercible (1.0.0)
+      descendants_tracker (~> 0.0.1)
     coffee-rails (4.2.1)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.2.x)
@@ -103,8 +109,11 @@ GEM
     delayed_job_active_record (4.1.1)
       activerecord (>= 3.0, < 5.1)
       delayed_job (>= 3.0, < 5)
+    descendants_tracker (0.0.4)
+      thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
     docile (1.1.5)
+    equalizer (0.0.11)
     erubis (2.7.0)
     escape_utils (1.2.1)
     execjs (2.7.0)
@@ -139,6 +148,7 @@ GEM
       activesupport
       builder
     i18n (0.8.1)
+    ice_nine (0.11.2)
     innertube (1.1.0)
     joiner (0.3.4)
       activerecord (>= 4.1.0)
@@ -352,6 +362,12 @@ GEM
       unicorn
     url (0.3.2)
     vcr (3.0.3)
+    virtus (1.0.5)
+      axiom-types (~> 0.1)
+      coercible (~> 1.0)
+      descendants_tracker (~> 0.0, >= 0.0.3)
+      equalizer (~> 0.0, >= 0.0.9)
+    virtus_convert (0.1.0)
     voight_kampff (1.1.1)
       rack (>= 1.4, < 3.0)
     webmock (2.3.1)
@@ -444,6 +460,8 @@ DEPENDENCIES
   uglifier (>= 1.2.2)
   unicorn-rails
   vcr
+  virtus
+  virtus_convert
   voight_kampff
   webmock (>= 2.3.0)
   xmlhash (>= 1.3.6)
