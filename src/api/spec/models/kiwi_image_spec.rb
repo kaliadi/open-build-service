@@ -9,10 +9,10 @@ RSpec.describe KiwiImage do
     subject { kiwi_image }
 
     it 'parses the repository elements of the xml into a KiwiImage model' do
-      expect(subject.repository[0].source.path).to eq('http://download.opensuse.org/update/13.2/')
-      expect(subject.repository[1].source.path).to eq('http://download.opensuse.org/distribution/13.2/repo/oss/')
-      expect(subject.repository[0].type).to eq('rpm-md')
-      expect(subject.repository[1].type).to eq('rpm-md')
+      expect(subject.repositories[0].source.path).to eq('http://download.opensuse.org/update/13.2/')
+      expect(subject.repositories[1].source.path).to eq('http://download.opensuse.org/distribution/13.2/repo/oss/')
+      expect(subject.repositories[0].type).to eq('rpm-md')
+      expect(subject.repositories[1].type).to eq('rpm-md')
     end
   end
 

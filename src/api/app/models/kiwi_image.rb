@@ -1,31 +1,6 @@
 require_dependency 'document'
 
 class KiwiImage < Document
-  class Description < Document
-    attribute :type, String
-    attribute :author, String
-    attribute :contact, String
-    attribute :specification, String
-  end
-
-  class Package < Document
-    attribute :name, String
-    attribute :bootinclude, Boolean
-
-    validates_presence_of :name
-    validate :package_exists_in_db
-
-    def package_exists_in_db
-      errors.add(:name) unless ::Package.exists?(name: name)
-    end
-  end
-
-  class PackageCollection < Document
-    attribute :type, String
-    attribute :patternType, String
-    attribute :package, Array[Package]
-  end
-
   class Source < Document
     attribute :path, String
   end
@@ -35,14 +10,9 @@ class KiwiImage < Document
     attribute :source, Source
   end
 
-  attribute :name, String
-  attribute :displayname, String
-  attribute :schemaversion, String
-  attribute :description, Description
-  attribute :packages, PackageCollection
   attribute :repository, Array[Repository]
+  alias_method :repositories, :repository
 
-  validates_presence_of :name
   validate :no_duplicate_repositories
 
   def no_duplicate_repositories
@@ -54,5 +24,10 @@ class KiwiImage < Document
         end
       end
     end
+  end
+
+  def self.from_xml(xml)
+    xml_hash = Xmlhash.parse(xml)
+    new(xml_hash.slice("repository"))
   end
 end
