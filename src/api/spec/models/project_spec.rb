@@ -99,6 +99,7 @@ RSpec.describe Project do
   end
 
   describe '#branch_remote_repositories' do
+    let!(:repository) { create(:repository, name: 'xUbuntu_14.04', project: project) }
     let(:remote_project) { create(:remote_project) }
     let(:remote_meta_xml) {
       <<-XML_DATA
@@ -123,9 +124,6 @@ RSpec.describe Project do
           <title>#{project.title}</title>
           <description/>
           <repository name="xUbuntu_14.04">
-            <path project="Ubuntu:14.04" repository="universe"/>" +
-            <arch>i586</arch>
-            <arch>x86_64</arch>
           </repository>
           <repository name="openSUSE_42.2">
             <path project="openSUSE:Leap:42.2:Update" repository="standard"/>

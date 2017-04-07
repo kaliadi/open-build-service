@@ -987,9 +987,19 @@ class Project < ApplicationRecord
     # retrieve and parse remote _meta file for project
     remote_project_meta = Nokogiri::XML(ProjectMetaFile.new(project_name: project).to_s)
 
+    # collect all repositories from the remote project
+    repos = []
+    remote_project_meta.xpath('//repository').each do |repo|
+      repos.push(repo.attributes.values.first.to_s)
+    end
+
+    # when the project already exists, there are probably some repos assigned to it. to
+    # avoid repo duplications, let's filter out existing ones
+    repositories.where(name: repos).each {|repo| repos.delete(repo.name)}
+
     # append the repositories to the _meta file of the local project
     local_project_meta = Nokogiri::XML(to_axml)
-    local_project_meta.at('project').add_child(remote_project_meta.xpath('//repository'))
+    repos.each {|repo| local_project_meta.at('project').add_child(remote_project_meta.xpath("//repository[@name='#{repo}']"))}
 
     # update branched project _meta file
     update_from_xml!(Xmlhash.parse(local_project_meta.to_xml))
