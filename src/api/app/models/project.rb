@@ -982,8 +982,6 @@ class Project < ApplicationRecord
 
     interconnect_project = RemoteProject.find_by(name: possible_ancestors)
 
-    return unless interconnect_project
-
     # retrieve and parse remote _meta file for project
     remote_project_meta = Nokogiri::XML(ProjectMetaFile.new(project_name: project).to_s)
 
