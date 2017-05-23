@@ -85,11 +85,16 @@ class Webui::MonitorController < Webui::WebuiController
     render json: workers
   end
 
-  def gethistory(key, range, cache = 1)
-    cachekey = key + "-#{range}"
-    Rails.cache.delete(cachekey, shared: true) unless cache
-    Rails.cache.fetch(cachekey, expires_in: (range.to_i * 3600) / 150, shared: true) do
-      hash = StatusHistory.history_by_key_and_hours(key, range)
+  def gethistory(key, range, end_date, cache = 1)
+    if end_date.empty?
+      cachekey = key + "-#{range}"
+      Rails.cache.delete(cachekey, shared: true) unless cache
+      Rails.cache.fetch(cachekey, expires_in: (range.to_i * 3600) / 150, shared: true) do
+        hash = StatusHistory.history_by_key_and_hours(key, range)
+        hash.sort { |a, b| a[0] <=> b[0] }
+      end
+    else
+      hash = StatusHistory.history_by_key_and_hours(key, range, end_date)
       hash.sort { |a, b| a[0] <=> b[0] }
     end
   end
@@ -101,18 +106,19 @@ class Webui::MonitorController < Webui::WebuiController
 
     arch = params[:arch]
     range = params[:range]
+    end_date = params[:end_date] || ''
     %w{waiting blocked squeue_high squeue_med}.each do |prefix|
-      data[prefix] = gethistory(prefix + '_' + arch, range, !discard_cache?).map { |time, value| [time * 1000, value] }
+      data[prefix] = gethistory(prefix + '_' + arch, range, end_date, !discard_cache?).map { |time, value| [time * 1000, value] }
     end
     %w{idle building away down dead}.each do |prefix|
-      data[prefix] = gethistory(prefix + '_' + map_to_workers(arch), range, !discard_cache?).map { |time, value| [time * 1000, value] }
+      data[prefix] = gethistory(prefix + '_' + map_to_workers(arch), range, end_date, !discard_cache?).map { |time, value| [time * 1000, value] }
     end
     low = Hash.new
-    gethistory("squeue_low_#{arch}", range).each do |time, value|
+    gethistory("squeue_low_#{arch}", range, end_date).each do |time, value|
       low[time] = value
     end
     comb = Array.new
-    gethistory("squeue_next_#{arch}", range).each do |time, value|
+    gethistory("squeue_next_#{arch}", range, end_date).each do |time, value|
       clow = low[time] || 0
       comb << [1000 * time, clow + value]
     end
