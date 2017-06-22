@@ -4,7 +4,7 @@ require 'capybara/poltergeist'
 require 'socket'
 
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, debug: false, timeout: 60)
+  Capybara::Poltergeist::Driver.new(app, debug: false, timeout: 90)
 end
 
 Capybara.default_driver = :poltergeist
