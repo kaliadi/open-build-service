@@ -68,3 +68,5 @@ CONFIG['response_schema_validation'] = true
 
 CONFIG['frontend_host'] = "localhost"
 CONFIG['frontend_protocol'] = "http"
+
+ENV['OBS_BACKEND_TEMP'] ||= "#{Rails.root}/tmp"

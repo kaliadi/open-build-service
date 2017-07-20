@@ -2,8 +2,8 @@
 ENV['RAILS_ENV'] ||= 'test'
 ENV['origin_RAILS_ENV'] ||= ENV['RAILS_ENV']
 ENV['LC_ALL'] = 'C'
-backendtempdir = ENV['OBS_BACKEND_TEMP']
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
+backendtempdir = ENV['OBS_BACKEND_TEMP'] || "#{Rails.root}/tmp"
 require 'builder'
 
 include TestBackendTasks
