@@ -2,6 +2,7 @@ module Event
   class Project < Base
     self.description = 'Project was touched'
     payload_keys :project
+    create_jobs :project_log_rotate_job
   end
 
   class CreateProject < Project

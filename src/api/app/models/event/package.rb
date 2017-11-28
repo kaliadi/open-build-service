@@ -2,6 +2,7 @@ module Event
   class Package < Base
     self.description = 'Package was touched'
     payload_keys :project, :package, :sender
+    create_jobs :project_log_rotate_job
   end
 
   class CreatePackage < Package
