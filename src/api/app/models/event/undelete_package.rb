@@ -1,5 +1,5 @@
 module Event
-  class UndeletePackage < Package
+  class UndeletePackage < Event::Package
     self.description = 'Package was undeleted'
     payload_keys :comment
     after_create_commit :send_to_bus

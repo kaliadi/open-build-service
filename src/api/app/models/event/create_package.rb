@@ -1,5 +1,5 @@
 module Event
-  class CreatePackage < Package
+  class CreatePackage < Event::Package
     self.description = 'Package was created'
     after_create_commit :send_to_bus
 

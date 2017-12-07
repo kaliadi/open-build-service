@@ -1,5 +1,5 @@
 module Event
-  class Upload < Package
+  class Upload < Event::Package
     self.description = 'Package sources were uploaded'
     payload_keys :project, :package, :comment, :filename, :requestid, :target, :user
     after_create_commit :send_to_bus

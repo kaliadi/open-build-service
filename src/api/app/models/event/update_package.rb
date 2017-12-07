@@ -1,5 +1,5 @@
 module Event
-  class UpdatePackage < Package
+  class UpdatePackage < Event::Package
     self.description = 'Package meta data was updated'
     after_create_commit :send_to_bus
 

@@ -1,5 +1,5 @@
 module Event
-  class UpdateProject < Project
+  class UpdateProject < Event::Project
     self.description = 'Project meta was updated'
     payload_keys :sender
     after_create_commit :send_to_bus

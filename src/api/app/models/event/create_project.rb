@@ -1,5 +1,5 @@
 module Event
-  class CreateProject < Project
+  class CreateProject < Event::Project
     self.description = 'Project is created'
     payload_keys :sender
     after_create_commit :send_to_bus

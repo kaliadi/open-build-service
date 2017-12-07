@@ -1,5 +1,5 @@
 module Event
-  class DeletePackage < Package
+  class DeletePackage < Event::Package
     self.description = 'Package was deleted'
     payload_keys :comment, :requestid
     after_create_commit :send_to_bus

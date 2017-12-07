@@ -1,5 +1,5 @@
 module Event
-  class CommentForPackage < Package
+  class CommentForPackage < Event::Package
     include CommentEvent
     receiver_roles :maintainer, :watcher
     after_create_commit :send_to_bus

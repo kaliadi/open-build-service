@@ -1,5 +1,5 @@
 module Event
-  class Build < Package
+  class Build < Event::Package
     self.description = 'Package has finished building'
     self.abstract_class = true
     payload_keys :repository, :arch, :release, :readytime, :srcmd5,

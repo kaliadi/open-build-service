@@ -1,5 +1,5 @@
 module Event
-  class DeleteProject < Project
+  class DeleteProject < Event::Project
     self.description = 'Project was deleted'
     payload_keys :comment, :requestid, :sender
     after_create_commit :send_to_bus

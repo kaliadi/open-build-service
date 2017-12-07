@@ -1,5 +1,5 @@
 module Event
-  class ServiceSuccess < Package
+  class ServiceSuccess < Event::Package
     self.description = 'Package source service has succeeded'
     payload_keys :comment, :package, :project, :rev, :user, :requestid
     receiver_roles :maintainer, :bugowner

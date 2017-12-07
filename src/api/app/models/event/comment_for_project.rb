@@ -1,5 +1,5 @@
 module Event
-  class CommentForProject < Project
+  class CommentForProject < Event::Project
     include CommentEvent
     receiver_roles :maintainer, :watcher
     after_create_commit :send_to_bus

@@ -1,5 +1,5 @@
 module Event
-  class ServiceFail < Package
+  class ServiceFail < Event::Package
     self.description = 'Package source service has failed'
     payload_keys :comment, :error, :package, :project, :rev, :user, :requestid
     receiver_roles :maintainer, :bugowner
