@@ -1,8 +1,10 @@
 <% @pagetitle = "Resource Information"
    @metarobots = 'noindex' # files change too often
    package_bread_crumb(
-           link_to('Binaries', :controller => 'package', :action => :binaries,
-                   :project                => @project, :package => @package, :repository => @repository, :arch => @arch))
+    link_to('Binaries', controller: 'package', 
+            package_binaries_path(project: @project, package: @package, repository: @repository, arch: @arch)
+    )
+  )
 -%>
 
 <%= render :partial => "tabs" %>
