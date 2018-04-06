@@ -1,47 +1,38 @@
 #
 class BsRequestActionSetBugowner < BsRequestAction
-  #### Includes and extends
-  #### Constants
-
-  #### Self config
   def self.sti_name
     :set_bugowner
   end
 
-  #### Attributes
-  #### Associations macros (Belongs to, Has one, Has many)
-  #### Callbacks macros: before_save, after_save, etc.
-  #### Scopes (first the default_scope macro if is used)
-  #### Validations macros
-  #### Class methods using self. (public and then private)
-  #### To define class methods as private use private_class_method
-  #### private
-
-  #### Instance methods (public and then protected/private)
   def check_sanity
     super
     return unless person_name.blank? && group_name.blank?
-
     errors.add(:person_name, 'Either person or group needs to be set')
   end
 
   def execute_accept(_opts)
-    object = Project.find_by_name!(target_project)
-    bugowner = Role.find_by_title!('bugowner')
-    object = object.packages.find_by_name!(target_package) if target_package
-    object.relationships.where('role_id = ?', bugowner).find_each(&:destroy)
-    object.add_user(person_name, bugowner, true) if person_name # runs with ignoreLock
-    object.add_group(group_name, bugowner, true) if group_name  # runs with ignoreLock
+    object = Project.find_by_name(target_project)
+    object = object.packages.find_by_name(target_package) if target_package
+
+    object.relationships.where('role_id = ?', role_object).find_each(&:destroy)
+
+    object.add_user(person_name, role_object, true) if person_name # runs with ignoreLock
+    object.add_group(group_name, role_object, true) if group_name  # runs with ignoreLock
+
     object.store(comment: "set_bugowner request #{bs_request.number}", request: bs_request)
   end
 
   def render_xml_attributes(node)
     render_xml_target(node)
     node.person name: person_name if person_name
-    node.group name: group_name   if group_name
+    node.group name: group_name if group_name
   end
 
-  #### Alias of methods
+  private
+
+  def role_object
+    @role_object = Role.find_by_title!('bugowner')
+  end
 end
 
 # == Schema Information
