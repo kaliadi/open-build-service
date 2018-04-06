@@ -1,5 +1,5 @@
 #
-class BsRequestActionSetBugowner < BsRequestAction
+class BsRequestActionSetBugowner < BsRequestActionAddRole
   def self.sti_name
     :set_bugowner
   end
