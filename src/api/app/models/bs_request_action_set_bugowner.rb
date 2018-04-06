@@ -1,27 +1,12 @@
 #
 class BsRequestActionSetBugowner < BsRequestAction
-  #### Includes and extends
-  #### Constants
-
-  #### Self config
   def self.sti_name
     :set_bugowner
   end
 
-  #### Attributes
-  #### Associations macros (Belongs to, Has one, Has many)
-  #### Callbacks macros: before_save, after_save, etc.
-  #### Scopes (first the default_scope macro if is used)
-  #### Validations macros
-  #### Class methods using self. (public and then private)
-  #### To define class methods as private use private_class_method
-  #### private
-
-  #### Instance methods (public and then protected/private)
   def check_sanity
     super
     return unless person_name.blank? && group_name.blank?
-
     errors.add(:person_name, 'Either person or group needs to be set')
   end
 
@@ -40,8 +25,6 @@ class BsRequestActionSetBugowner < BsRequestAction
     node.person name: person_name if person_name
     node.group name: group_name   if group_name
   end
-
-  #### Alias of methods
 end
 
 # == Schema Information
